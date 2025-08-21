@@ -3,7 +3,7 @@ package com.example.truckrobot.model;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 @Schema(description = "Cardinal directions the robot can face")
-public enum Direction {
+public enum Turn {
     @Schema(description = "Facing towards positive Y axis")
     NORTH,
 
@@ -16,7 +16,7 @@ public enum Direction {
     @Schema(description = "Facing towards negative X axis")
     WEST;
 
-    public Direction turnLeft() {
+    public Turn turnLeft() {
         return switch (this) {
             case NORTH -> WEST;
             case WEST -> SOUTH;
@@ -25,7 +25,7 @@ public enum Direction {
         };
     }
 
-    public Direction turnRight() {
+    public Turn turnRight() {
         return switch (this) {
             case NORTH -> EAST;
             case EAST -> SOUTH;

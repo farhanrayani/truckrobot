@@ -1,6 +1,6 @@
 package com.example.truckrobot.dto;
 
-import com.example.truckrobot.model.Direction;
+import com.example.truckrobot.model.Turn;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -37,11 +37,11 @@ public class PlaceRequest {
         allowableValues = {"NORTH", "SOUTH", "EAST", "WEST"}
     )
     @NotNull(message = "Facing direction is required")
-    private Direction facing;
+    private Turn facing;
 
     public PlaceRequest() {}
 
-    public PlaceRequest(int x, int y, Direction facing) {
+    public PlaceRequest(int x, int y, Turn facing) {
         this.x = x;
         this.y = y;
         this.facing = facing;
@@ -63,11 +63,11 @@ public class PlaceRequest {
         this.y = y;
     }
 
-    public Direction getFacing() {
+    public Turn getFacing() {
         return facing;
     }
 
-    public void setFacing(Direction facing) {
+    public void setFacing(Turn facing) {
         this.facing = facing;
     }
 }

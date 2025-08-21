@@ -27,17 +27,17 @@ public class OpenApiConfig {
                                 A REST API for simulating a truck robot moving on a 5x5 table.
                                 
                                 ## Features
-                                - Place robot on table with position and direction
+                                - Place robot on table with location and turn
                                 - Move robot one unit forward
                                 - Rotate robot left or right (90 degrees)
-                                - Get current robot position and direction
+                                - Get current robot location and turn
                                 - Prevent robot from falling off the table
                                 
                                 ## Table Specification
                                 - Size: 5x5 units
                                 - Origin (0,0): South-West corner
                                 - Valid positions: (0,0) to (4,4)
-                                - Valid directions: NORTH, SOUTH, EAST, WEST
+                                - Valid turns: NORTH, SOUTH, EAST, WEST
                                 """)
                 .version("v1.0.0")
                 .contact(new Contact()

@@ -20,12 +20,12 @@ mvn spring-boot:run
 ## API Endpoints
 
 **Robot Control:**
-- `POST /api/v1/robot/place` - Place robot on table
-- `POST /api/v1/robot/move` - Move robot forward
-- `POST /api/v1/robot/left` - Turn robot left
-- `POST /api/v1/robot/right` - Turn robot right
-- `GET /api/v1/robot/report` - Get robot status
-- `POST /api/v1/robot/reset` - Reset robot
+- `POST /api/v1/nav/place` - Place robot on table
+- `POST /api/v1/nav/move` - Move robot forward
+- `POST /api/v1/nav/left` - Turn robot left
+- `POST /api/v1/nav/right` - Turn robot right
+- `GET /api/v1/nav/report` - Get robot status
+- `POST /api/v1/nav/reset` - Reset robot
 
 **Interactive Docs**: `http://localhost:8080/truckrobot/swagger-ui.html`
 
@@ -33,13 +33,13 @@ mvn spring-boot:run
 
 ```bash
 # Place robot
-curl -X POST http://localhost:8080/truckrobot/api/v1/robot/place \
+curl -X POST http://localhost:8080/truckrobot/api/v1/nav/place \
   -H "Content-Type: application/json" \
   -d '{"x": 0, "y": 0, "facing": "NORTH"}'
 
-# Move and check position
-curl -X POST http://localhost:8080/truckrobot/api/v1/robot/move
-curl -X GET http://localhost:8080/truckrobot/api/v1/robot/report
+# Move and check location
+curl -X POST http://localhost:8080/truckrobot/api/v1/nav/move
+curl -X GET http://localhost:8080/truckrobot/api/v1/nav/report
 # Response: {"message":"0,1,NORTH","status":"SUCCESS"}
 ```
 
@@ -63,7 +63,7 @@ mvn clean package
 
 **Key Features:**
 - 5×5 table boundary protection
-- Cardinal direction movement (NORTH, SOUTH, EAST, WEST)
+- Cardinal turn movement (NORTH, SOUTH, EAST, WEST)
 - Input validation with detailed error messages
 - High test coverage (>95%)
 - Checkstyle code quality enforcement

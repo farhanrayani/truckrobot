@@ -1,43 +1,43 @@
 package com.example.truckrobot.service;
 
-import com.example.truckrobot.model.Direction;
-import com.example.truckrobot.model.Robot;
+import com.example.truckrobot.model.Turn;
+import com.example.truckrobot.model.Navigator;
 import org.springframework.stereotype.Service;
 
 @Service
-public class RobotService {
-    private Robot robot;
+public class NavigatorService {
+    private Navigator navigator;
 
-    public RobotService() {
-        this.robot = new Robot();
+    public NavigatorService() {
+        this.navigator = new Navigator();
     }
 
-    public boolean place(int x, int y, Direction direction) {
+    public boolean place(int x, int y, Turn turn) {
         if (isValidPosition(x, y)) {
-            robot.place(x, y, direction);
+            navigator.place(x, y, turn);
             return true;
         }
         return false;
     }
 
     public void move() {
-        robot.move();
+        navigator.move();
     }
 
     public void turnLeft() {
-        robot.turnLeft();
+        navigator.turnLeft();
     }
 
     public void turnRight() {
-        robot.turnRight();
+        navigator.turnRight();
     }
 
     public String report() {
-        return robot.report();
+        return navigator.report();
     }
 
     public boolean isRobotPlaced() {
-        return robot.isPlaced();
+        return navigator.isPlaced();
     }
 
     private boolean isValidPosition(int x, int y) {
@@ -45,6 +45,6 @@ public class RobotService {
     }
 
     public void reset() {
-        robot.reset();
+        navigator.reset();
     }
 }

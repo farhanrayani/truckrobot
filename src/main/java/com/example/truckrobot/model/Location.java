@@ -1,10 +1,10 @@
 package com.example.truckrobot.model;
 
-public class Position {
+public class Location {
     private final int x;
     private final int y;
 
-    public Position(int x, int y) {
+    public Location(int x, int y) {
         this.x = x;
         this.y = y;
     }
@@ -17,12 +17,12 @@ public class Position {
         return y;
     }
 
-    public Position move(Direction direction) {
-        return switch (direction) {
-            case NORTH -> new Position(x, y + 1);
-            case SOUTH -> new Position(x, y - 1);
-            case EAST -> new Position(x + 1, y);
-            case WEST -> new Position(x - 1, y);
+    public Location move(Turn turn) {
+        return switch (turn) {
+            case NORTH -> new Location(x, y + 1);
+            case SOUTH -> new Location(x, y - 1);
+            case EAST -> new Location(x + 1, y);
+            case WEST -> new Location(x - 1, y);
         };
     }
 

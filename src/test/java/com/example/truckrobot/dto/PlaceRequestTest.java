@@ -1,6 +1,6 @@
 package com.example.truckrobot.dto;
 
-import com.example.truckrobot.model.Direction;
+import com.example.truckrobot.model.Turn;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -12,20 +12,20 @@ class PlaceRequestTest {
         PlaceRequest request = new PlaceRequest();
         request.setX(2);
         request.setY(3);
-        request.setFacing(Direction.EAST);
+        request.setFacing(Turn.EAST);
 
         assertEquals(2, request.getX());
         assertEquals(3, request.getY());
-        assertEquals(Direction.EAST, request.getFacing());
+        assertEquals(Turn.EAST, request.getFacing());
     }
 
     @Test
     void testPlaceRequestConstructor() {
-        PlaceRequest request = new PlaceRequest(1, 4, Direction.WEST);
+        PlaceRequest request = new PlaceRequest(1, 4, Turn.WEST);
 
         assertEquals(1, request.getX());
         assertEquals(4, request.getY());
-        assertEquals(Direction.WEST, request.getFacing());
+        assertEquals(Turn.WEST, request.getFacing());
     }
 
     @Test

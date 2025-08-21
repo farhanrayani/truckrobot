@@ -2,7 +2,7 @@ package com.example.truckrobot.controller;
 
 import com.example.truckrobot.dto.PlaceRequest;
 import com.example.truckrobot.dto.RobotResponse;
-import com.example.truckrobot.service.RobotService;
+import com.example.truckrobot.service.NavigatorService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -17,19 +17,19 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1/robot")
+@RequestMapping("/api/v1/nav")
 @Tag(name = "Robot Control", description = "APIs for controlling the truck robot on a 5x5 table")
-public class RobotController {
+public class NavigatorController {
 
     @Autowired
-    private RobotService robotService;
+    private NavigatorService navigatorService;
 
     @Operation(
         summary = "Place robot on table",
         description = """
-                Places the truck robot on the table at the specified position (x, y) facing the given direction.
+                Places the truck robot on the table at the specified location (x, y) facing the given turn.
                 The robot can be placed anywhere on the 5x5 table (coordinates 0-4).
-                If robot is already placed, this command will move it to the new position.
+                If robot is already placed, this command will move it to the new location.
                 """,
         tags = {"Robot Control"}
     )
@@ -53,15 +53,15 @@ public class RobotController {
         ),
         @ApiResponse(
             responseCode = "400",
-            description = "Invalid position - outside table boundaries",
+            description = "Invalid location - outside table boundaries",
             content = @Content(
                 mediaType = "application/json",
                 schema = @Schema(implementation = RobotResponse.class),
                 examples = @ExampleObject(
-                    name = "Invalid position",
+                    name = "Invalid location",
                     value = """
                             {
-                              "message": "Invalid position. Robot cannot be placed outside the 5x5 table.",
+                              "message": "Invalid location. Robot cannot be placed outside the 5x5 table.",
                               "status": "ERROR"
                             }
                             """
@@ -72,13 +72,13 @@ public class RobotController {
     @PostMapping("/place")
     public ResponseEntity<RobotResponse> place(
         @Parameter(
-            description = "Robot placement request with x, y coordinates (0-4) and facing direction",
+            description = "Robot placement request with x, y coordinates (0-4) and facing turn",
             required = true,
             schema = @Schema(implementation = PlaceRequest.class)
         )
         @Valid @RequestBody PlaceRequest request) {
         try {
-            boolean success = robotService.place(request.getX(), request.getY(), request.getFacing());
+            boolean success = navigatorService.place(request.getX(), request.getY(), request.getFacing());
             if (success) {
                 return ResponseEntity.ok(new RobotResponse(
                     "Robot placed at " + request.getX() + "," + request.getY() + " facing " + request.getFacing(),
@@ -86,7 +86,7 @@ public class RobotController {
                 ));
             } else {
                 return ResponseEntity.badRequest().body(new RobotResponse(
-                    "Invalid position. Robot cannot be placed outside the 5x5 table.",
+                    "Invalid location. Robot cannot be placed outside the 5x5 table.",
                     "ERROR"
                 ));
             }
@@ -101,7 +101,7 @@ public class RobotController {
     @Operation(
         summary = "Move robot forward",
         description = """
-                Moves the robot one unit forward in the direction it is currently facing.
+                Moves the robot one unit forward in the turn it is currently facing.
                 The robot will ignore this command if it would result in falling off the table.
                 Robot must be placed on the table before this command can be executed.
                 """,
@@ -141,21 +141,21 @@ public class RobotController {
     })
     @PostMapping("/move")
     public ResponseEntity<RobotResponse> move() {
-        if (!robotService.isRobotPlaced()) {
+        if (!navigatorService.isRobotPlaced()) {
             return ResponseEntity.badRequest().body(new RobotResponse(
                 "Robot is not placed on the table. Use PLACE command first.",
                 "ERROR"
             ));
         }
 
-        robotService.move();
+        navigatorService.move();
         return ResponseEntity.ok(new RobotResponse("Robot moved", "SUCCESS"));
     }
 
     @Operation(
         summary = "Turn robot left",
         description = """
-                Rotates the robot 90 degrees to the left (counter-clockwise) without changing its position.
+                Rotates the robot 90 degrees to the left (counter-clockwise) without changing its location.
                 Direction changes: NORTH → WEST → SOUTH → EAST → NORTH
                 Robot must be placed on the table before this command can be executed.
                 """,
@@ -167,21 +167,21 @@ public class RobotController {
     })
     @PostMapping("/left")
     public ResponseEntity<RobotResponse> turnLeft() {
-        if (!robotService.isRobotPlaced()) {
+        if (!navigatorService.isRobotPlaced()) {
             return ResponseEntity.badRequest().body(new RobotResponse(
                 "Robot is not placed on the table. Use PLACE command first.",
                 "ERROR"
             ));
         }
 
-        robotService.turnLeft();
+        navigatorService.turnLeft();
         return ResponseEntity.ok(new RobotResponse("Robot turned left", "SUCCESS"));
     }
 
     @Operation(
         summary = "Turn robot right",
         description = """
-                Rotates the robot 90 degrees to the right (clockwise) without changing its position.
+                Rotates the robot 90 degrees to the right (clockwise) without changing its location.
                 Direction changes: NORTH → EAST → SOUTH → WEST → NORTH
                 Robot must be placed on the table before this command can be executed.
                 """,
@@ -193,21 +193,21 @@ public class RobotController {
     })
     @PostMapping("/right")
     public ResponseEntity<RobotResponse> turnRight() {
-        if (!robotService.isRobotPlaced()) {
+        if (!navigatorService.isRobotPlaced()) {
             return ResponseEntity.badRequest().body(new RobotResponse(
                 "Robot is not placed on the table. Use PLACE command first.",
                 "ERROR"
             ));
         }
 
-        robotService.turnRight();
+        navigatorService.turnRight();
         return ResponseEntity.ok(new RobotResponse("Robot turned right", "SUCCESS"));
     }
 
     @Operation(
-        summary = "Get robot position and direction",
+        summary = "Get robot location and turn",
         description = """
-                Returns the current X, Y position and facing direction of the robot.
+                Returns the current X, Y location and facing turn of the robot.
                 Format: "X,Y,DIRECTION" (e.g., "0,1,NORTH")
                 Returns "ROBOT MISSING" if robot has not been placed on the table.
                 """,
@@ -244,7 +244,7 @@ public class RobotController {
     })
     @GetMapping("/report")
     public ResponseEntity<RobotResponse> report() {
-        String report = robotService.report();
+        String report = navigatorService.report();
         return ResponseEntity.ok(new RobotResponse(report, "SUCCESS"));
     }
 
@@ -260,7 +260,7 @@ public class RobotController {
     @ApiResponse(responseCode = "200", description = "Robot reset successfully")
     @PostMapping("/reset")
     public ResponseEntity<RobotResponse> reset() {
-        robotService.reset();
+        navigatorService.reset();
         return ResponseEntity.ok(new RobotResponse("Robot reset", "SUCCESS"));
     }
 }

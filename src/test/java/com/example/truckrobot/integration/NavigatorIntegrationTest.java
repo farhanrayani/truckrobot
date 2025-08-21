@@ -1,7 +1,7 @@
 package com.example.truckrobot.integration;
 
 import com.example.truckrobot.dto.PlaceRequest;
-import com.example.truckrobot.model.Direction;
+import com.example.truckrobot.model.Turn;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,7 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureWebMvc
 @ActiveProfiles("test")
-class RobotIntegrationTest {
+class NavigatorIntegrationTest {
 
     @Autowired
     private WebApplicationContext webApplicationContext;
@@ -45,7 +45,7 @@ class RobotIntegrationTest {
     @Test
     void testExample1_Place00North_Move_Report() throws Exception {
         // PLACE 0,0,NORTH
-        PlaceRequest placeRequest = new PlaceRequest(0, 0, Direction.NORTH);
+        PlaceRequest placeRequest = new PlaceRequest(0, 0, Turn.NORTH);
         mockMvc.perform(post("/api/v1/robot/place")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(placeRequest)))
@@ -64,7 +64,7 @@ class RobotIntegrationTest {
     @Test
     void testExample2_Place00North_Left_Report() throws Exception {
         // PLACE 0,0,NORTH
-        PlaceRequest placeRequest = new PlaceRequest(0, 0, Direction.NORTH);
+        PlaceRequest placeRequest = new PlaceRequest(0, 0, Turn.NORTH);
         mockMvc.perform(post("/api/v1/robot/place")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(placeRequest)))
@@ -83,7 +83,7 @@ class RobotIntegrationTest {
     @Test
     void testExample3_Place12East_Move_Move_Left_Move_Report() throws Exception {
         // PLACE 1,2,EAST
-        PlaceRequest placeRequest = new PlaceRequest(1, 2, Direction.EAST);
+        PlaceRequest placeRequest = new PlaceRequest(1, 2, Turn.EAST);
         mockMvc.perform(post("/api/v1/robot/place")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(placeRequest)))
@@ -126,7 +126,7 @@ class RobotIntegrationTest {
     @Test
     void testBoundaryPrevention_NorthBoundary() throws Exception {
         // Place at north boundary
-        PlaceRequest placeRequest = new PlaceRequest(2, 4, Direction.NORTH);
+        PlaceRequest placeRequest = new PlaceRequest(2, 4, Turn.NORTH);
         mockMvc.perform(post("/api/v1/robot/place")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(placeRequest)))
@@ -145,16 +145,16 @@ class RobotIntegrationTest {
     @Test
     void testBoundaryPrevention_AllBoundaries() throws Exception {
         // Test all boundaries
-        Direction[] directions = {Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST};
+        Turn[] turns = {Turn.NORTH, Turn.SOUTH, Turn.EAST, Turn.WEST};
         int[][] positions = {{2, 4}, {2, 0}, {4, 2}, {0, 2}};
         String[] expectedReports = {"2,4,NORTH", "2,0,SOUTH", "4,2,EAST", "0,2,WEST"};
 
-        for (int i = 0; i < directions.length; i++) {
+        for (int i = 0; i < turns.length; i++) {
             // Reset
             mockMvc.perform(post("/api/v1/robot/reset"));
 
             // Place at boundary
-            PlaceRequest placeRequest = new PlaceRequest(positions[i][0], positions[i][1], directions[i]);
+            PlaceRequest placeRequest = new PlaceRequest(positions[i][0], positions[i][1], turns[i]);
             mockMvc.perform(post("/api/v1/robot/place")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(placeRequest)))
@@ -176,7 +176,7 @@ class RobotIntegrationTest {
         int[][] invalidPositions = {{-1, 0}, {0, -1}, {5, 0}, {0, 5}, {-1, -1}, {5, 5}};
 
         for (int[] pos : invalidPositions) {
-            PlaceRequest placeRequest = new PlaceRequest(pos[0], pos[1], Direction.NORTH);
+            PlaceRequest placeRequest = new PlaceRequest(pos[0], pos[1], Turn.NORTH);
             mockMvc.perform(post("/api/v1/robot/place")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(placeRequest)))
@@ -191,7 +191,7 @@ class RobotIntegrationTest {
         mockMvc.perform(post("/api/v1/robot/reset"));
 
         // Place robot
-        PlaceRequest placeRequest = new PlaceRequest(2, 2, Direction.NORTH);
+        PlaceRequest placeRequest = new PlaceRequest(2, 2, Turn.NORTH);
         mockMvc.perform(post("/api/v1/robot/place")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(placeRequest)))
@@ -232,7 +232,7 @@ class RobotIntegrationTest {
     @Test
     void testMultiplePlacementOperations() throws Exception {
         // First placement
-        PlaceRequest placeRequest1 = new PlaceRequest(1, 1, Direction.NORTH);
+        PlaceRequest placeRequest1 = new PlaceRequest(1, 1, Turn.NORTH);
         mockMvc.perform(post("/api/v1/robot/place")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(placeRequest1)))
@@ -242,7 +242,7 @@ class RobotIntegrationTest {
             .andExpect(jsonPath("$.message").value("1,1,NORTH"));
 
         // Second placement (should overwrite first)
-        PlaceRequest placeRequest2 = new PlaceRequest(3, 3, Direction.SOUTH);
+        PlaceRequest placeRequest2 = new PlaceRequest(3, 3, Turn.SOUTH);
         mockMvc.perform(post("/api/v1/robot/place")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(placeRequest2)))

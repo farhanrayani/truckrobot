@@ -6,13 +6,13 @@ import org.junit.jupiter.params.provider.CsvSource;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class PositionTest {
+class LocationTest {
 
     @Test
     void testPositionCreation() {
-        Position position = new Position(2, 3);
-        assertEquals(2, position.getX());
-        assertEquals(3, position.getY());
+        Location location = new Location(2, 3);
+        assertEquals(2, location.getX());
+        assertEquals(3, location.getY());
     }
 
     @ParameterizedTest
@@ -26,9 +26,9 @@ class PositionTest {
         "2, 3, EAST, 3, 3",
         "2, 3, WEST, 1, 3"
     })
-    void testMove_AllDirections(int startX, int startY, Direction direction, int expectedX, int expectedY) {
-        Position start = new Position(startX, startY);
-        Position result = start.move(direction);
+    void testMove_AllDirections(int startX, int startY, Turn turn, int expectedX, int expectedY) {
+        Location start = new Location(startX, startY);
+        Location result = start.move(turn);
 
         assertEquals(expectedX, result.getX());
         assertEquals(expectedY, result.getY());
@@ -36,8 +36,8 @@ class PositionTest {
 
     @Test
     void testMove_DoesNotModifyOriginalPosition() {
-        Position original = new Position(1, 1);
-        Position moved = original.move(Direction.NORTH);
+        Location original = new Location(1, 1);
+        Location moved = original.move(Turn.NORTH);
 
         assertEquals(1, original.getX());
         assertEquals(1, original.getY());
@@ -47,8 +47,8 @@ class PositionTest {
 
     @Test
     void testPositionToString() {
-        Position position = new Position(3, 4);
-        String result = position.toString();
+        Location location = new Location(3, 4);
+        String result = location.toString();
         assertTrue(result.contains("x=3"));
         assertTrue(result.contains("y=4"));
     }

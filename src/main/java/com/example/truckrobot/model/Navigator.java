@@ -1,17 +1,17 @@
 package com.example.truckrobot.model;
 
-public class Robot {
-    private Position position;
-    private Direction facing;
+public class Navigator {
+    private Location location;
+    private Turn facing;
     private boolean placed;
 
-    public Robot() {
+    public Navigator() {
         this.placed = false;
     }
 
-    public void place(int x, int y, Direction direction) {
-        this.position = new Position(x, y);
-        this.facing = direction;
+    public void place(int x, int y, Turn turn) {
+        this.location = new Location(x, y);
+        this.facing = turn;
         this.placed = true;
     }
 
@@ -29,20 +29,20 @@ public class Robot {
 
     public void move() {
         if (placed) {
-            Position newPosition = position.move(facing);
-            if (isValidPosition(newPosition)) {
-                this.position = newPosition;
+            Location newLocation = location.move(facing);
+            if (isValidPosition(newLocation)) {
+                this.location = newLocation;
             }
         }
     }
 
     public void reset() {
-        this.position = null;
+        this.location = null;
         this.facing = null;
         this.placed = false;
     }
 
-    private boolean isValidPosition(Position pos) {
+    private boolean isValidPosition(Location pos) {
         return pos.getX() >= 0 && pos.getX() < 5 && pos.getY() >= 0 && pos.getY() < 5;
     }
 
@@ -50,18 +50,18 @@ public class Robot {
         if (!placed) {
             return "ROBOT MISSING";
         }
-        return position.getX() + "," + position.getY() + "," + facing;
+        return location.getX() + "," + location.getY() + "," + facing;
     }
 
     public boolean isPlaced() {
         return placed;
     }
 
-    public Position getPosition() {
-        return position;
+    public Location getPosition() {
+        return location;
     }
 
-    public Direction getFacing() {
+    public Turn getFacing() {
         return facing;
     }
 }

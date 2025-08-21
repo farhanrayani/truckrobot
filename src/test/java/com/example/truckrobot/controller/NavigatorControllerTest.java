@@ -1,8 +1,8 @@
 package com.example.truckrobot.controller;
 
 import com.example.truckrobot.dto.PlaceRequest;
-import com.example.truckrobot.model.Direction;
-import com.example.truckrobot.service.RobotService;
+import com.example.truckrobot.model.Turn;
+import com.example.truckrobot.service.NavigatorService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,27 +18,27 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(RobotController.class)
-class RobotControllerTest {
+@WebMvcTest(NavigatorController.class)
+class NavigatorControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
 
     @MockBean
-    private RobotService robotService;
+    private NavigatorService navigatorService;
 
     @Autowired
     private ObjectMapper objectMapper;
 
     @BeforeEach
     void setUp() {
-        reset(robotService);
+        reset(navigatorService);
     }
 
     @Test
     void testPlace_ValidPosition_Success() throws Exception {
-        PlaceRequest request = new PlaceRequest(0, 0, Direction.NORTH);
-        when(robotService.place(anyInt(), anyInt(), any(Direction.class))).thenReturn(true);
+        PlaceRequest request = new PlaceRequest(0, 0, Turn.NORTH);
+        when(navigatorService.place(anyInt(), anyInt(), any(Turn.class))).thenReturn(true);
 
         mockMvc.perform(post("/api/v1/robot/place")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -47,13 +47,13 @@ class RobotControllerTest {
             .andExpect(jsonPath("$.message").value("Robot placed at 0,0 facing NORTH"))
             .andExpect(jsonPath("$.status").value("SUCCESS"));
 
-        verify(robotService).place(0, 0, Direction.NORTH);
+        verify(navigatorService).place(0, 0, Turn.NORTH);
     }
 
     @Test
     void testPlace_InvalidPosition_BadRequest() throws Exception {
-        PlaceRequest request = new PlaceRequest(5, 5, Direction.NORTH);
-        when(robotService.place(anyInt(), anyInt(), any(Direction.class))).thenReturn(false);
+        PlaceRequest request = new PlaceRequest(5, 5, Turn.NORTH);
+        when(navigatorService.place(anyInt(), anyInt(), any(Turn.class))).thenReturn(false);
 
         mockMvc.perform(post("/api/v1/robot/place")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -62,7 +62,7 @@ class RobotControllerTest {
             .andExpect(jsonPath("$.message").value("Invalid position. Robot cannot be placed outside the 5x5 table."))
             .andExpect(jsonPath("$.status").value("ERROR"));
 
-        verify(robotService).place(5, 5, Direction.NORTH);
+        verify(navigatorService).place(5, 5, Turn.NORTH);
     }
 
     @Test
@@ -76,43 +76,43 @@ class RobotControllerTest {
 
     @Test
     void testMove_RobotPlaced_Success() throws Exception {
-        when(robotService.isRobotPlaced()).thenReturn(true);
+        when(navigatorService.isRobotPlaced()).thenReturn(true);
 
         mockMvc.perform(post("/api/v1/robot/move"))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.message").value("Robot moved"))
             .andExpect(jsonPath("$.status").value("SUCCESS"));
 
-        verify(robotService).move();
+        verify(navigatorService).move();
     }
 
     @Test
     void testMove_RobotNotPlaced_BadRequest() throws Exception {
-        when(robotService.isRobotPlaced()).thenReturn(false);
+        when(navigatorService.isRobotPlaced()).thenReturn(false);
 
         mockMvc.perform(post("/api/v1/robot/move"))
             .andExpect(status().isBadRequest())
             .andExpect(jsonPath("$.message").value("Robot is not placed on the table. Use PLACE command first."))
             .andExpect(jsonPath("$.status").value("ERROR"));
 
-        verify(robotService, never()).move();
+        verify(navigatorService, never()).move();
     }
 
     @Test
     void testTurnLeft_RobotPlaced_Success() throws Exception {
-        when(robotService.isRobotPlaced()).thenReturn(true);
+        when(navigatorService.isRobotPlaced()).thenReturn(true);
 
         mockMvc.perform(post("/api/v1/robot/left"))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.message").value("Robot turned left"))
             .andExpect(jsonPath("$.status").value("SUCCESS"));
 
-        verify(robotService).turnLeft();
+        verify(navigatorService).turnLeft();
     }
 
     @Test
     void testTurnLeft_RobotNotPlaced_BadRequest() throws Exception {
-        when(robotService.isRobotPlaced()).thenReturn(false);
+        when(navigatorService.isRobotPlaced()).thenReturn(false);
 
         mockMvc.perform(post("/api/v1/robot/left"))
             .andExpect(status().isBadRequest())
@@ -121,19 +121,19 @@ class RobotControllerTest {
 
     @Test
     void testTurnRight_RobotPlaced_Success() throws Exception {
-        when(robotService.isRobotPlaced()).thenReturn(true);
+        when(navigatorService.isRobotPlaced()).thenReturn(true);
 
         mockMvc.perform(post("/api/v1/robot/right"))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.message").value("Robot turned right"))
             .andExpect(jsonPath("$.status").value("SUCCESS"));
 
-        verify(robotService).turnRight();
+        verify(navigatorService).turnRight();
     }
 
     @Test
     void testTurnRight_RobotNotPlaced_BadRequest() throws Exception {
-        when(robotService.isRobotPlaced()).thenReturn(false);
+        when(navigatorService.isRobotPlaced()).thenReturn(false);
 
         mockMvc.perform(post("/api/v1/robot/right"))
             .andExpect(status().isBadRequest())
@@ -142,19 +142,19 @@ class RobotControllerTest {
 
     @Test
     void testReport_Success() throws Exception {
-        when(robotService.report()).thenReturn("2,3,NORTH");
+        when(navigatorService.report()).thenReturn("2,3,NORTH");
 
         mockMvc.perform(get("/api/v1/robot/report"))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.message").value("2,3,NORTH"))
             .andExpect(jsonPath("$.status").value("SUCCESS"));
 
-        verify(robotService).report();
+        verify(navigatorService).report();
     }
 
     @Test
     void testReport_RobotMissing() throws Exception {
-        when(robotService.report()).thenReturn("ROBOT MISSING");
+        when(navigatorService.report()).thenReturn("ROBOT MISSING");
 
         mockMvc.perform(get("/api/v1/robot/report"))
             .andExpect(status().isOk())
@@ -169,6 +169,6 @@ class RobotControllerTest {
             .andExpect(jsonPath("$.message").value("Robot reset"))
             .andExpect(jsonPath("$.status").value("SUCCESS"));
 
-        verify(robotService).reset();
+        verify(navigatorService).reset();
     }
 }

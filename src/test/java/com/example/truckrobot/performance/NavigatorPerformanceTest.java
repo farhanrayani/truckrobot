@@ -1,20 +1,20 @@
 package com.example.truckrobot.performance;
 
-import com.example.truckrobot.model.Direction;
-import com.example.truckrobot.service.RobotService;
+import com.example.truckrobot.model.Turn;
+import com.example.truckrobot.service.NavigatorService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.util.StopWatch;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class RobotPerformanceTest {
+class NavigatorPerformanceTest {
 
-    private RobotService robotService;
+    private NavigatorService navigatorService;
 
     @BeforeEach
     void setUp() {
-        robotService = new RobotService();
+        navigatorService = new NavigatorService();
     }
 
     @Test
@@ -24,11 +24,11 @@ class RobotPerformanceTest {
 
         // Perform 1000 operations
         for (int i = 0; i < 1000; i++) {
-            robotService.place(i % 5, (i + 1) % 5, Direction.values()[i % 4]);
-            robotService.move();
-            robotService.turnLeft();
-            robotService.turnRight();
-            robotService.report();
+            navigatorService.place(i % 5, (i + 1) % 5, Turn.values()[i % 4]);
+            navigatorService.move();
+            navigatorService.turnLeft();
+            navigatorService.turnRight();
+            navigatorService.report();
         }
 
         stopWatch.stop();
@@ -42,8 +42,8 @@ class RobotPerformanceTest {
     void testMemoryEfficiency() {
         // Test that creating many robot instances doesn't cause memory issues
         for (int i = 0; i < 1000; i++) {
-            RobotService service = new RobotService();
-            service.place(0, 0, Direction.NORTH);
+            NavigatorService service = new NavigatorService();
+            service.place(0, 0, Turn.NORTH);
             service.move();
             assertEquals("0,1,NORTH", service.report());
         }
