@@ -22,16 +22,11 @@ public class NavigatorController {
     @Autowired
     private NavigatorService navigatorService;
 
-    @Operation(
-        summary = "Place robot on table",
-        description = "Places on the table at the specified location."
-    )
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "200",description = "Robot placed successfully",
+    @Operation( summary = "Place robot on table",description = "Places on the table at the specified location.")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200",description = "Robot placed successfully",
             content = @Content( mediaType = "application/json",schema = @Schema(implementation = ResponseDto.class))),
         @ApiResponse(responseCode = "400",description = "Invalid location",
-            content = @Content(mediaType = "application/json",schema = @Schema(implementation = ResponseDto.class)))
-    })
+            content = @Content(mediaType = "application/json",schema = @Schema(implementation = ResponseDto.class)))})
     @PostMapping("/place")
     public ResponseEntity<ResponseDto> doPlace(@RequestBody(required = true) PlaceDto placeDto) {
         try {
@@ -62,8 +57,7 @@ public class NavigatorController {
     @ApiResponses(value = {@ApiResponse(responseCode = "200",description = "Robot moved successfully",
         content = @Content(mediaType = "application/json")),
         @ApiResponse(responseCode = "400",description = "Robot not placed on table",
-            content = @Content(mediaType = "application/json")
-        )
+            content = @Content(mediaType = "application/json"))
     })
     @PostMapping("/move")
     public ResponseEntity<ResponseDto> move() {
@@ -77,10 +71,7 @@ public class NavigatorController {
         return ResponseEntity.ok(new ResponseDto("Robot moved", "SUCCESS"));
     }
 
-    @Operation(
-        summary = "Turn robot left",
-        description = "Rotates the robot 90 degrees to the left."
-    )
+    @Operation(summary = "Turn robot left",description = "Rotates the robot 90 degrees to the left.")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Robot turned left successfully"),
         @ApiResponse(responseCode = "400", description = "Robot not placed on table")
@@ -97,10 +88,8 @@ public class NavigatorController {
         return ResponseEntity.ok(new ResponseDto("Robot turned left", "SUCCESS"));
     }
 
-    @Operation(
-        summary = "Turn robot right",
-        description = "Rotates the robot 90 degrees to the right without changing its location."
-    )
+    @Operation(summary = "Turn robot right",
+        description = "Rotates the robot 90 degrees to the right without changing its location.")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Robot turned right successfully"),
         @ApiResponse(responseCode = "400", description = "Robot not placed on table")
@@ -117,10 +106,8 @@ public class NavigatorController {
         return ResponseEntity.ok(new ResponseDto("Robot turned right", "SUCCESS"));
     }
 
-    @Operation(
-        summary = "Get robot location and turn",
-        description = "Returns the current X, Y location and facing turn of the robot."
-    )
+    @Operation(summary = "Get robot location and turn",
+        description = "Returns the current X, Y location and facing turn of the robot.")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200",description = "Robot status retrieved successfully",
             content = @Content( mediaType = "application/json"))})

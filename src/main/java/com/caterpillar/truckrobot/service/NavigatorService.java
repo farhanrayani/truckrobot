@@ -21,30 +21,37 @@ public class NavigatorService {
     }
 
     public void move() {
+
         navigator.move();
     }
 
     public void turnLeft() {
+
         navigator.turnLeft();
     }
 
     public void turnRight() {
+
         navigator.turnRight();
     }
 
     public String report() {
+
         return navigator.report();
     }
 
     public boolean isRobotPlaced() {
+
         return navigator.isPlaced();
     }
 
     private boolean isValidPosition(int x, int y) {
+
         return x >= 0 && x < 5 && y >= 0 && y < 5;
     }
 
     public void reset() {
+
         navigator.reset();
     }
 }
