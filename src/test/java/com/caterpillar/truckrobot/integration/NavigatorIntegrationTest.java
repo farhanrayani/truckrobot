@@ -36,7 +36,7 @@ class NavigatorIntegrationTest {
 
         // Reset robot before each test
         try {
-            mockMvc.perform(post("/api/v1/robot/reset"));
+            mockMvc.perform(post("/api/v1/nav/reset"));
         } catch (Exception e) {
             // Ignore errors during setup
         }
@@ -46,17 +46,17 @@ class NavigatorIntegrationTest {
     void testExample1_Place00North_Move_Report() throws Exception {
         // PLACE 0,0,NORTH
         PlaceRequest placeRequest = new PlaceRequest(0, 0, Turn.NORTH);
-        mockMvc.perform(post("/api/v1/robot/place")
+        mockMvc.perform(post("/api/v1/nav/place")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(placeRequest)))
             .andExpect(status().isOk());
 
         // MOVE
-        mockMvc.perform(post("/api/v1/robot/move"))
+        mockMvc.perform(post("/api/v1/nav/move"))
             .andExpect(status().isOk());
 
         // REPORT - Expected: 0,1,NORTH
-        mockMvc.perform(get("/api/v1/robot/report"))
+        mockMvc.perform(get("/api/v1/nav/report"))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.message").value("0,1,NORTH"));
     }
@@ -65,17 +65,17 @@ class NavigatorIntegrationTest {
     void testExample2_Place00North_Left_Report() throws Exception {
         // PLACE 0,0,NORTH
         PlaceRequest placeRequest = new PlaceRequest(0, 0, Turn.NORTH);
-        mockMvc.perform(post("/api/v1/robot/place")
+        mockMvc.perform(post("/api/v1/nav/place")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(placeRequest)))
             .andExpect(status().isOk());
 
         // LEFT
-        mockMvc.perform(post("/api/v1/robot/left"))
+        mockMvc.perform(post("/api/v1/nav/left"))
             .andExpect(status().isOk());
 
         // REPORT - Expected: 0,0,WEST
-        mockMvc.perform(get("/api/v1/robot/report"))
+        mockMvc.perform(get("/api/v1/nav/report"))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.message").value("0,0,WEST"));
     }
@@ -84,29 +84,29 @@ class NavigatorIntegrationTest {
     void testExample3_Place12East_Move_Move_Left_Move_Report() throws Exception {
         // PLACE 1,2,EAST
         PlaceRequest placeRequest = new PlaceRequest(1, 2, Turn.EAST);
-        mockMvc.perform(post("/api/v1/robot/place")
+        mockMvc.perform(post("/api/v1/nav/place")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(placeRequest)))
             .andExpect(status().isOk());
 
         // MOVE
-        mockMvc.perform(post("/api/v1/robot/move"))
+        mockMvc.perform(post("/api/v1/nav/move"))
             .andExpect(status().isOk());
 
         // MOVE
-        mockMvc.perform(post("/api/v1/robot/move"))
+        mockMvc.perform(post("/api/v1/nav/move"))
             .andExpect(status().isOk());
 
         // LEFT
-        mockMvc.perform(post("/api/v1/robot/left"))
+        mockMvc.perform(post("/api/v1/nav/left"))
             .andExpect(status().isOk());
 
         // MOVE
-        mockMvc.perform(post("/api/v1/robot/move"))
+        mockMvc.perform(post("/api/v1/nav/move"))
             .andExpect(status().isOk());
 
         // REPORT - Expected: 3,3,NORTH
-        mockMvc.perform(get("/api/v1/robot/report"))
+        mockMvc.perform(get("/api/v1/nav/report"))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.message").value("3,3,NORTH"));
     }
@@ -114,11 +114,11 @@ class NavigatorIntegrationTest {
     @Test
     void testExample4_Move_Report_WithoutPlacement() throws Exception {
         // MOVE (without placement)
-        mockMvc.perform(post("/api/v1/robot/move"))
+        mockMvc.perform(post("/api/v1/nav/move"))
             .andExpect(status().isBadRequest());
 
         // REPORT - Expected: ROBOT MISSING
-        mockMvc.perform(get("/api/v1/robot/report"))
+        mockMvc.perform(get("/api/v1/nav/report"))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.message").value("ROBOT MISSING"));
     }
@@ -127,17 +127,17 @@ class NavigatorIntegrationTest {
     void testBoundaryPrevention_NorthBoundary() throws Exception {
         // Place at north boundary
         PlaceRequest placeRequest = new PlaceRequest(2, 4, Turn.NORTH);
-        mockMvc.perform(post("/api/v1/robot/place")
+        mockMvc.perform(post("/api/v1/nav/place")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(placeRequest)))
             .andExpect(status().isOk());
 
         // Try to move off table
-        mockMvc.perform(post("/api/v1/robot/move"))
+        mockMvc.perform(post("/api/v1/nav/move"))
             .andExpect(status().isOk());
 
         // Should still be at same position
-        mockMvc.perform(get("/api/v1/robot/report"))
+        mockMvc.perform(get("/api/v1/nav/report"))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.message").value("2,4,NORTH"));
     }
@@ -151,21 +151,21 @@ class NavigatorIntegrationTest {
 
         for (int i = 0; i < turns.length; i++) {
             // Reset
-            mockMvc.perform(post("/api/v1/robot/reset"));
+            mockMvc.perform(post("/api/v1/nav/reset"));
 
             // Place at boundary
             PlaceRequest placeRequest = new PlaceRequest(positions[i][0], positions[i][1], turns[i]);
-            mockMvc.perform(post("/api/v1/robot/place")
+            mockMvc.perform(post("/api/v1/nav/place")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(placeRequest)))
                 .andExpect(status().isOk());
 
             // Try to move off table
-            mockMvc.perform(post("/api/v1/robot/move"))
+            mockMvc.perform(post("/api/v1/nav/move"))
                 .andExpect(status().isOk());
 
             // Should still be at same position
-            mockMvc.perform(get("/api/v1/robot/report"))
+            mockMvc.perform(get("/api/v1/nav/report"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value(expectedReports[i]));
         }
@@ -177,7 +177,7 @@ class NavigatorIntegrationTest {
 
         for (int[] pos : invalidPositions) {
             PlaceRequest placeRequest = new PlaceRequest(pos[0], pos[1], Turn.NORTH);
-            mockMvc.perform(post("/api/v1/robot/place")
+            mockMvc.perform(post("/api/v1/nav/place")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(placeRequest)))
                 .andExpect(status().isBadRequest())
@@ -188,20 +188,20 @@ class NavigatorIntegrationTest {
     @Test
     void testComplexMovementSequence() throws Exception {
         // Complex sequence test
-        mockMvc.perform(post("/api/v1/robot/reset"));
+        mockMvc.perform(post("/api/v1/nav/reset"));
 
         // Place robot
         PlaceRequest placeRequest = new PlaceRequest(2, 2, Turn.NORTH);
-        mockMvc.perform(post("/api/v1/robot/place")
+        mockMvc.perform(post("/api/v1/nav/place")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(placeRequest)))
             .andExpect(status().isOk());
 
         // Move west
-        mockMvc.perform(post("/api/v1/robot/move"));
+        mockMvc.perform(post("/api/v1/nav/move"));
 
         // Should be back at original position (2,2) but facing WEST
-        mockMvc.perform(get("/api/v1/robot/report"))
+        mockMvc.perform(get("/api/v1/nav/report"))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.message").value("2,3,NORTH"));
     }
@@ -209,22 +209,22 @@ class NavigatorIntegrationTest {
     @Test
     void testRobotIgnoresCommandsWhenNotPlaced() throws Exception {
         // Ensure robot is not placed
-        mockMvc.perform(post("/api/v1/robot/reset"));
+        mockMvc.perform(post("/api/v1/nav/reset"));
 
         // Try MOVE without placement
-        mockMvc.perform(post("/api/v1/robot/move"))
+        mockMvc.perform(post("/api/v1/nav/move"))
             .andExpect(status().isBadRequest());
 
         // Try LEFT without placement
-        mockMvc.perform(post("/api/v1/robot/left"))
+        mockMvc.perform(post("/api/v1/nav/left"))
             .andExpect(status().isBadRequest());
 
         // Try RIGHT without placement
-        mockMvc.perform(post("/api/v1/robot/right"))
+        mockMvc.perform(post("/api/v1/nav/right"))
             .andExpect(status().isBadRequest());
 
         // REPORT should still work and return ROBOT MISSING
-        mockMvc.perform(get("/api/v1/robot/report"))
+        mockMvc.perform(get("/api/v1/nav/report"))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.message").value("ROBOT MISSING"));
     }
@@ -233,22 +233,22 @@ class NavigatorIntegrationTest {
     void testMultiplePlacementOperations() throws Exception {
         // First placement
         PlaceRequest placeRequest1 = new PlaceRequest(1, 1, Turn.NORTH);
-        mockMvc.perform(post("/api/v1/robot/place")
+        mockMvc.perform(post("/api/v1/nav/place")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(placeRequest1)))
             .andExpect(status().isOk());
 
-        mockMvc.perform(get("/api/v1/robot/report"))
+        mockMvc.perform(get("/api/v1/nav/report"))
             .andExpect(jsonPath("$.message").value("1,1,NORTH"));
 
         // Second placement (should overwrite first)
         PlaceRequest placeRequest2 = new PlaceRequest(3, 3, Turn.SOUTH);
-        mockMvc.perform(post("/api/v1/robot/place")
+        mockMvc.perform(post("/api/v1/nav/place")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(placeRequest2)))
             .andExpect(status().isOk());
 
-        mockMvc.perform(get("/api/v1/robot/report"))
+        mockMvc.perform(get("/api/v1/nav/report"))
             .andExpect(jsonPath("$.message").value("3,3,SOUTH"));
     }
 }
