@@ -1,0 +1,13 @@
+server:
+  port: 0  # Use random port for tests
+  servlet:
+    context-path: /truckrobot
+
+spring:
+  application:
+    name: truck-robot-api-test
+
+logging:
+  level:
+    com.example.truckrobot: DEBUG
+    org.springframework.web: DEBUG
