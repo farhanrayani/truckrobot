@@ -11,11 +11,17 @@ public class Location {
     private int y;
 
     public Location move(Turn turn) {
-        return switch (turn) {
-            case NORTH -> new Location(x, y + 1);
-            case SOUTH -> new Location(x, y - 1);
-            case EAST -> new Location(x + 1, y);
-            case WEST -> new Location(x - 1, y);
-        };
+        switch (turn) {
+            case NORTH:
+                return new Location(x, y + 1);
+            case SOUTH:
+                return new Location(x, y - 1);
+            case EAST:
+                return new Location(x + 1, y);
+            case WEST:
+                return new Location(x - 1, y);
+            default:
+                throw new IllegalArgumentException("Invalid turn: " + turn);
+        }
     }
 }
