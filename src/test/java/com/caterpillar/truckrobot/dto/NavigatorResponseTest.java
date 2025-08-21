@@ -8,7 +8,7 @@ class NavigatorResponseTest {
 
     @Test
     void testRobotResponseCreation() {
-        RobotResponse response = new RobotResponse("Test message", "SUCCESS");
+        ResponseDto response = new ResponseDto("Test message", "SUCCESS");
 
         assertEquals("Test message", response.getMessage());
         assertEquals("SUCCESS", response.getStatus());
@@ -16,7 +16,7 @@ class NavigatorResponseTest {
 
     @Test
     void testRobotResponseSetters() {
-        RobotResponse response = new RobotResponse("Initial", "INITIAL");
+        ResponseDto response = new ResponseDto("Initial", "INITIAL");
 
         response.setMessage("Updated message");
         response.setStatus("ERROR");

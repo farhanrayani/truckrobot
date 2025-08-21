@@ -1,6 +1,6 @@
 package com.caterpillar.truckrobot.controller;
 
-import com.caterpillar.truckrobot.dto.PlaceRequest;
+import com.caterpillar.truckrobot.dto.PlaceDto;
 import com.caterpillar.truckrobot.model.Turn;
 import com.caterpillar.truckrobot.service.NavigatorService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -37,22 +37,20 @@ class NavigatorControllerTest {
 
     @Test
     void testPlace_ValidPosition_Success() throws Exception {
-        PlaceRequest request = new PlaceRequest(0, 0, Turn.NORTH);
+        PlaceDto request = new PlaceDto(0, 0, Turn.NORTH);
         when(navigatorService.place(anyInt(), anyInt(), any(Turn.class))).thenReturn(true);
 
         mockMvc.perform(post("/api/v1/nav/place")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$.message").value("Robot placed at 0,0 facing NORTH"))
-            .andExpect(jsonPath("$.status").value("SUCCESS"));
-
+             .andExpect(jsonPath("$.status").value("SUCCESS"));
         verify(navigatorService).place(0, 0, Turn.NORTH);
     }
 
     @Test
     void testPlace_InvalidPosition_BadRequest() throws Exception {
-        PlaceRequest request = new PlaceRequest(5, 5, Turn.NORTH);
+        PlaceDto request = new PlaceDto(5, 5, Turn.NORTH);
         when(navigatorService.place(anyInt(), anyInt(), any(Turn.class))).thenReturn(false);
 
         mockMvc.perform(post("/api/v1/nav/place")

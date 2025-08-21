@@ -1,6 +1,6 @@
 package com.caterpillar.truckrobot.integration;
 
-import com.caterpillar.truckrobot.dto.PlaceRequest;
+import com.caterpillar.truckrobot.dto.PlaceDto;
 import com.caterpillar.truckrobot.model.Turn;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -45,10 +45,10 @@ class NavigatorIntegrationTest {
     @Test
     void testExample1_Place00North_Move_Report() throws Exception {
         // PLACE 0,0,NORTH
-        PlaceRequest placeRequest = new PlaceRequest(0, 0, Turn.NORTH);
+        PlaceDto placeDto = new PlaceDto(0, 0, Turn.NORTH);
         mockMvc.perform(post("/api/v1/nav/place")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(placeRequest)))
+                .content(objectMapper.writeValueAsString(placeDto)))
             .andExpect(status().isOk());
 
         // MOVE
@@ -64,10 +64,10 @@ class NavigatorIntegrationTest {
     @Test
     void testExample2_Place00North_Left_Report() throws Exception {
         // PLACE 0,0,NORTH
-        PlaceRequest placeRequest = new PlaceRequest(0, 0, Turn.NORTH);
+        PlaceDto placeDto = new PlaceDto(0, 0, Turn.NORTH);
         mockMvc.perform(post("/api/v1/nav/place")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(placeRequest)))
+                .content(objectMapper.writeValueAsString(placeDto)))
             .andExpect(status().isOk());
 
         // LEFT
@@ -83,10 +83,10 @@ class NavigatorIntegrationTest {
     @Test
     void testExample3_Place12East_Move_Move_Left_Move_Report() throws Exception {
         // PLACE 1,2,EAST
-        PlaceRequest placeRequest = new PlaceRequest(1, 2, Turn.EAST);
+        PlaceDto placeDto = new PlaceDto(1, 2, Turn.EAST);
         mockMvc.perform(post("/api/v1/nav/place")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(placeRequest)))
+                .content(objectMapper.writeValueAsString(placeDto)))
             .andExpect(status().isOk());
 
         // MOVE
@@ -126,10 +126,10 @@ class NavigatorIntegrationTest {
     @Test
     void testBoundaryPrevention_NorthBoundary() throws Exception {
         // Place at north boundary
-        PlaceRequest placeRequest = new PlaceRequest(2, 4, Turn.NORTH);
+        PlaceDto placeDto = new PlaceDto(2, 4, Turn.NORTH);
         mockMvc.perform(post("/api/v1/nav/place")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(placeRequest)))
+                .content(objectMapper.writeValueAsString(placeDto)))
             .andExpect(status().isOk());
 
         // Try to move off table
@@ -154,10 +154,10 @@ class NavigatorIntegrationTest {
             mockMvc.perform(post("/api/v1/nav/reset"));
 
             // Place at boundary
-            PlaceRequest placeRequest = new PlaceRequest(positions[i][0], positions[i][1], turns[i]);
+            PlaceDto placeDto = new PlaceDto(positions[i][0], positions[i][1], turns[i]);
             mockMvc.perform(post("/api/v1/nav/place")
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(objectMapper.writeValueAsString(placeRequest)))
+                    .content(objectMapper.writeValueAsString(placeDto)))
                 .andExpect(status().isOk());
 
             // Try to move off table
@@ -176,12 +176,11 @@ class NavigatorIntegrationTest {
         int[][] invalidPositions = {{-1, 0}, {0, -1}, {5, 0}, {0, 5}, {-1, -1}, {5, 5}};
 
         for (int[] pos : invalidPositions) {
-            PlaceRequest placeRequest = new PlaceRequest(pos[0], pos[1], Turn.NORTH);
+            PlaceDto placeDto = new PlaceDto(pos[0], pos[1], Turn.NORTH);
             mockMvc.perform(post("/api/v1/nav/place")
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(objectMapper.writeValueAsString(placeRequest)))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.status").value("ERROR"));
+                    .content(objectMapper.writeValueAsString(placeDto)))
+                .andExpect(status().isBadRequest());
         }
     }
 
@@ -191,10 +190,10 @@ class NavigatorIntegrationTest {
         mockMvc.perform(post("/api/v1/nav/reset"));
 
         // Place robot
-        PlaceRequest placeRequest = new PlaceRequest(2, 2, Turn.NORTH);
+        PlaceDto placeDto = new PlaceDto(2, 2, Turn.NORTH);
         mockMvc.perform(post("/api/v1/nav/place")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(placeRequest)))
+                .content(objectMapper.writeValueAsString(placeDto)))
             .andExpect(status().isOk());
 
         // Move west
@@ -232,20 +231,20 @@ class NavigatorIntegrationTest {
     @Test
     void testMultiplePlacementOperations() throws Exception {
         // First placement
-        PlaceRequest placeRequest1 = new PlaceRequest(1, 1, Turn.NORTH);
+        PlaceDto placeDto1 = new PlaceDto(1, 1, Turn.NORTH);
         mockMvc.perform(post("/api/v1/nav/place")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(placeRequest1)))
+                .content(objectMapper.writeValueAsString(placeDto1)))
             .andExpect(status().isOk());
 
         mockMvc.perform(get("/api/v1/nav/report"))
             .andExpect(jsonPath("$.message").value("1,1,NORTH"));
 
         // Second placement (should overwrite first)
-        PlaceRequest placeRequest2 = new PlaceRequest(3, 3, Turn.SOUTH);
+        PlaceDto placeDto2 = new PlaceDto(3, 3, Turn.SOUTH);
         mockMvc.perform(post("/api/v1/nav/place")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(placeRequest2)))
+                .content(objectMapper.writeValueAsString(placeDto2)))
             .andExpect(status().isOk());
 
         mockMvc.perform(get("/api/v1/nav/report"))

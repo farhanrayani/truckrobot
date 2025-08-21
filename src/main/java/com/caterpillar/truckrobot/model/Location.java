@@ -1,8 +1,8 @@
 package com.caterpillar.truckrobot.model;
 
 public class Location {
-    private final int x;
-    private final int y;
+    private int x;
+    private int y;
 
     public Location(int x, int y) {
         this.x = x;

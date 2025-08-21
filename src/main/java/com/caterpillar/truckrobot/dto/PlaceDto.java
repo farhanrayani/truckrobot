@@ -7,7 +7,7 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 
 @Schema(description = "Request to place robot on the table")
-public class PlaceRequest {
+public class PlaceDto {
 
     @Schema(
         description = "X coordinate on the table",
@@ -39,9 +39,9 @@ public class PlaceRequest {
     @NotNull(message = "Facing direction is required")
     private Turn facing;
 
-    public PlaceRequest() {}
+    public PlaceDto() {}
 
-    public PlaceRequest(int x, int y, Turn facing) {
+    public PlaceDto(int x, int y, Turn facing) {
         this.x = x;
         this.y = y;
         this.facing = facing;

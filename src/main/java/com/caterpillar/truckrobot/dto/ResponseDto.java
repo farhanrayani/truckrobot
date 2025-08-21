@@ -3,7 +3,7 @@ package com.caterpillar.truckrobot.dto;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 @Schema(description = "Standard response from robot operations")
-public class RobotResponse {
+public class ResponseDto {
 
     @Schema(
         description = "Response message describing the result of the operation",
@@ -18,7 +18,7 @@ public class RobotResponse {
     )
     private String status;
 
-    public RobotResponse(String message, String status) {
+    public ResponseDto(String message, String status) {
         this.message = message;
         this.status = status;
     }

@@ -5,11 +5,11 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class PlaceRequestTest {
+class PlaceDtoTest {
 
     @Test
     void testPlaceRequestCreation() {
-        PlaceRequest request = new PlaceRequest();
+        PlaceDto request = new PlaceDto();
         request.setX(2);
         request.setY(3);
         request.setFacing(Turn.EAST);
@@ -21,7 +21,7 @@ class PlaceRequestTest {
 
     @Test
     void testPlaceRequestConstructor() {
-        PlaceRequest request = new PlaceRequest(1, 4, Turn.WEST);
+        PlaceDto request = new PlaceDto(1, 4, Turn.WEST);
 
         assertEquals(1, request.getX());
         assertEquals(4, request.getY());
@@ -30,7 +30,7 @@ class PlaceRequestTest {
 
     @Test
     void testPlaceRequestDefaultConstructor() {
-        PlaceRequest request = new PlaceRequest();
+        PlaceDto request = new PlaceDto();
 
         assertEquals(0, request.getX()); // Default int value
         assertEquals(0, request.getY()); // Default int value
