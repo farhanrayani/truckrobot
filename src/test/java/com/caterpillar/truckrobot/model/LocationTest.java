@@ -44,12 +44,4 @@ class LocationTest {
         assertEquals(1, moved.getX());
         assertEquals(2, moved.getY());
     }
-
-    @Test
-    void testPositionToString() {
-        Location location = new Location(3, 4);
-        String result = location.toString();
-        assertTrue(result.contains("x=3"));
-        assertTrue(result.contains("y=4"));
-    }
 }

@@ -1,21 +1,14 @@
 package com.caterpillar.truckrobot.model;
 
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+
+@Data
+@AllArgsConstructor
 public class Location {
     private int x;
     private int y;
-
-    public Location(int x, int y) {
-        this.x = x;
-        this.y = y;
-    }
-
-    public int getX() {
-        return x;
-    }
-
-    public int getY() {
-        return y;
-    }
 
     public Location move(Turn turn) {
         return switch (turn) {
@@ -24,10 +17,5 @@ public class Location {
             case EAST -> new Location(x + 1, y);
             case WEST -> new Location(x - 1, y);
         };
-    }
-
-    @Override
-    public String toString() {
-        return "Position{x=" + x + ", y=" + y + '}';
     }
 }
