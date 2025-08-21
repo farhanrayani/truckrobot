@@ -1,14 +1,14 @@
-package com.caterpillar.truckrobot.service;
+package com.caterpillar.truckrobot.component;
 
 import com.caterpillar.truckrobot.model.Navigator;
 import com.caterpillar.truckrobot.model.Turn;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
-@Service
-public class NavigatorService {
+@Component
+public class NavigatorComponent {
     private Navigator navigator;
 
-    public NavigatorService() {
+    public NavigatorComponent() {
         this.navigator = new Navigator();
     }
 
