@@ -7,12 +7,33 @@ spring:
   application:
     name: truck-robot-api
 
-logging:
-  level:
-    com.example.truckrobot: DEBUG
+# OpenAPI/Swagger Configuration
+springdoc:
+  api-docs:
+    enabled: true
+    path: /api-docs
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+    operations-sorter: method
+    tags-sorter: alpha
+    try-it-out-enabled: true
+    filter: true
+    display-request-duration: true
+    disable-swagger-default-url: true
+  show-actuator: false
+  group-configs:
+    - group: 'truck-robot-api'
+      display-name: 'Truck Robot API'
+      paths-to-match: '/api/v1/**'
 
+# Management endpoints
 management:
   endpoints:
     web:
       exposure:
-        include: health,info
+        include: health,info,openapi,swagger-ui
+
+logging:
+  level:
+    com.example.truckrobot: DEBUG
