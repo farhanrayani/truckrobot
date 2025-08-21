@@ -10,7 +10,7 @@ A REST API for simulating a truck robot moving on a 5×5 table surface with boun
 
 ### Setup
 ```bash
-git clone https://github.com/your-username/truck-robot-api.git
+git clone https://github.com/farhanrayani/truckrobot
 cd truck-robot-api
 mvn spring-boot:run
 ```
