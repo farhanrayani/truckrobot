@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<!DOCTYPE suppressions PUBLIC
+  "-//Checkstyle//DTD SuppressionFilter Configuration 1.2//EN"
+  "https://checkstyle.org/dtds/suppressions_1_2.dtd">
+
+<suppressions>
+  <!-- Suppress all checks for generated files -->
+  <suppress files=".*[\\/]generated[\\/].*" checks="."/>
+  <suppress files=".*[\\/]target[\\/].*" checks="."/>
+
+  <!-- Suppress specific checks for test files -->
+  <suppress files=".*Test\.java" checks="MagicNumber"/>
+  <suppress files=".*Test\.java" checks="MethodLength"/>
+  <suppress files=".*Test\.java" checks="ExecutableStatementCount"/>
+  <suppress files=".*Test\.java" checks="LineLength"/>
+  <suppress files=".*Test\.java" checks="DesignForExtension"/>
+  <suppress files=".*Test\.java" checks="VisibilityModifier"/>
+  <suppress files=".*Test\.java" checks="FinalParameters"/>
+
+  <!-- Suppress checks for Spring Boot main class -->
+  <suppress files=".*Application\.java" checks="HideUtilityClassConstructor"/>
+  <suppress files=".*Application\.java" checks="DesignForExtension"/>
+  <suppress files=".*Application\.java" checks="FinalClass"/>
+
+  <!-- Suppress checks for DTOs -->
+  <suppress files=".*dto[\\/].*\.java" checks="VisibilityModifier"/>
+  <suppress files=".*dto[\\/].*\.java" checks="DesignForExtension"/>
+  <suppress files=".*dto[\\/].*\.java" checks="FinalParameters"/>
+
+  <!-- Suppress checks for model classes -->
+  <suppress files=".*model[\\/].*\.java" checks="VisibilityModifier"/>
+  <suppress files=".*model[\\/].*\.java" checks="DesignForExtension"/>
+
+  <!-- Suppress checks for controller classes -->
+  <suppress files=".*controller[\\/].*\.java" checks="DesignForExtension"/>
+
+  <!-- Suppress checks for service classes -->
+  <suppress files=".*service[\\/].*\.java" checks="DesignForExtension"/>
+
+  <!-- Suppress line length for import statements -->
+  <suppress files=".*\.java" checks="LineLength" lines="1-20"/>
+
+  <!-- Suppress magic number for common constants -->
+  <suppress files=".*\.java" checks="MagicNumber" message=".*'8080'.*"/>
+  <suppress files=".*\.java" checks="MagicNumber" message=".*'5'.*"/>
+  <suppress files=".*\.java" checks="MagicNumber" message=".*'120'.*"/>
+
+  <!-- Suppress specific violations for configuration files -->
+  <suppress files=".*Config\.java" checks="DesignForExtension"/>
+  <suppress files=".*Config\.java" checks="HideUtilityClassConstructor"/>
+</suppressions>
