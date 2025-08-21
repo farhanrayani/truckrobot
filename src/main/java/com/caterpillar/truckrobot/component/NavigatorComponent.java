@@ -8,6 +8,9 @@ import org.springframework.stereotype.Component;
 public class NavigatorComponent {
     private Navigator navigator;
 
+    /**
+     * Constructor for NavigatorComponent to provide singleton capabilities so that robot states are maintained
+     */
     public NavigatorComponent() {
         this.navigator = new Navigator();
     }

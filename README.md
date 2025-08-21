@@ -49,13 +49,13 @@ curl -X GET http://localhost:8080/truckrobot/api/v1/nav/report
 # Run tests
 mvn test
 
-# Check coverage (target: >95%)
+# Check coverage
 mvn test jacoco:report
 
 # Check code style
 mvn checkstyle:check
 
-# Build production JAR
+# Build
 mvn clean package
 ```
 
@@ -65,5 +65,5 @@ mvn clean package
 - 5×5 table boundary protection
 - Cardinal turn movement (NORTH, SOUTH, EAST, WEST)
 - Input validation with detailed error messages
-- High test coverage (>95%)
+- High test coverage
 - Checkstyle code quality enforcement
