@@ -6,36 +6,19 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 
-@Schema(description = "Request to place robot on the table")
+
 public class PlaceDto {
 
-    @Schema(
-        description = "X coordinate on the table",
-        example = "0",
-        minimum = "0",
-        maximum = "4"
-    )
     @NotNull(message = "X coordinate is required")
     @Min(value = 0, message = "X coordinate must be between 0 and 4")
     @Max(value = 4, message = "X coordinate must be between 0 and 4")
     private int x;
 
-    @Schema(
-        description = "Y coordinate on the table",
-        example = "0",
-        minimum = "0",
-        maximum = "4"
-    )
     @NotNull(message = "Y coordinate is required")
     @Min(value = 0, message = "Y coordinate must be between 0 and 4")
     @Max(value = 4, message = "Y coordinate must be between 0 and 4")
     private int y;
 
-    @Schema(
-        description = "Direction the robot should face",
-        example = "NORTH",
-        allowableValues = {"NORTH", "SOUTH", "EAST", "WEST"}
-    )
     @NotNull(message = "Facing direction is required")
     private Turn facing;
 
