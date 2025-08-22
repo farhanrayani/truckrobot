@@ -19,7 +19,7 @@ class NavigatorComponentTest {
 
     @Test
     void testPlace_ValidPosition_ReturnsTrue() {
-        boolean result = navigatorComponent.place(0, 0, Turn.NORTH);
+        boolean result = navigatorComponent.doPlacing(0, 0, Turn.NORTH);
         assertTrue(result);
         assertTrue(navigatorComponent.isRobotPlaced());
     }
@@ -34,14 +34,14 @@ class NavigatorComponentTest {
         "5, 5, NORTH"
     })
     void testPlace_InvalidPosition_ReturnsFalse(int x, int y, Turn turn) {
-        boolean result = navigatorComponent.place(x, y, turn);
+        boolean result = navigatorComponent.doPlacing(x, y, turn);
         assertFalse(result);
         assertFalse(navigatorComponent.isRobotPlaced());
     }
 
     @Test
     void testMove_WhenPlaced() {
-        navigatorComponent.place(1, 1, Turn.NORTH);
+        navigatorComponent.doPlacing(1, 1, Turn.NORTH);
         navigatorComponent.move();
         assertEquals("1,2,NORTH", navigatorComponent.report());
     }
@@ -54,7 +54,7 @@ class NavigatorComponentTest {
 
     @Test
     void testTurnLeft_WhenPlaced() {
-        navigatorComponent.place(1, 1, Turn.NORTH);
+        navigatorComponent.doPlacing(1, 1, Turn.NORTH);
         navigatorComponent.turnLeft();
         assertEquals("1,1,WEST", navigatorComponent.report());
     }
@@ -67,7 +67,7 @@ class NavigatorComponentTest {
 
     @Test
     void testTurnRight_WhenPlaced() {
-        navigatorComponent.place(1, 1, Turn.NORTH);
+        navigatorComponent.doPlacing(1, 1, Turn.NORTH);
         navigatorComponent.turnRight();
         assertEquals("1,1,EAST", navigatorComponent.report());
     }
@@ -85,13 +85,13 @@ class NavigatorComponentTest {
 
     @Test
     void testReport_AfterPlacement() {
-        navigatorComponent.place(2, 3, Turn.SOUTH);
+        navigatorComponent.doPlacing(2, 3, Turn.SOUTH);
         assertEquals("2,3,SOUTH", navigatorComponent.report());
     }
 
     @Test
     void testReset() {
-        navigatorComponent.place(2, 3, Turn.EAST);
+        navigatorComponent.doPlacing(2, 3, Turn.EAST);
         assertTrue(navigatorComponent.isRobotPlaced());
 
         navigatorComponent.reset();
@@ -103,14 +103,14 @@ class NavigatorComponentTest {
     @Test
     void testBoundaryValidation() {
         // Valid boundaries
-        assertTrue(navigatorComponent.place(0, 0, Turn.NORTH));
+        assertTrue(navigatorComponent.doPlacing(0, 0, Turn.NORTH));
         navigatorComponent.reset();
-        assertTrue(navigatorComponent.place(4, 4, Turn.NORTH));
+        assertTrue(navigatorComponent.doPlacing(4, 4, Turn.NORTH));
 
         // Invalid boundaries
-        assertFalse(navigatorComponent.place(-1, 0, Turn.NORTH));
-        assertFalse(navigatorComponent.place(0, -1, Turn.NORTH));
-        assertFalse(navigatorComponent.place(5, 0, Turn.NORTH));
-        assertFalse(navigatorComponent.place(0, 5, Turn.NORTH));
+        assertFalse(navigatorComponent.doPlacing(-1, 0, Turn.NORTH));
+        assertFalse(navigatorComponent.doPlacing(0, -1, Turn.NORTH));
+        assertFalse(navigatorComponent.doPlacing(5, 0, Turn.NORTH));
+        assertFalse(navigatorComponent.doPlacing(0, 5, Turn.NORTH));
     }
 }

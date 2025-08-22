@@ -4,17 +4,18 @@ import com.caterpillar.truckrobot.dto.PlaceDto;
 import com.caterpillar.truckrobot.dto.ResponseDto;
 import com.caterpillar.truckrobot.component.NavigatorComponent;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.logging.Logger;
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/nav")
+@Slf4j
 public class NavigatorController {
 
     @Autowired
@@ -26,7 +27,7 @@ public class NavigatorController {
     @PostMapping("/place")
     public ResponseEntity<ResponseDto> doPlace(@RequestBody(required = true) PlaceDto placeDto) {
         try {
-            boolean isValid = navigatorComponent.place(placeDto.getX(), placeDto.getY(), placeDto.getFacing());
+            boolean isValid = navigatorComponent.doPlacing(placeDto.getX(), placeDto.getY(), placeDto.getFacing());
             if (isValid) {
                 ResponseDto responseDto =new ResponseDto(
                     "Coordinates" + placeDto.getX() + "," + placeDto.getY() + " facing " + placeDto.getFacing(),
@@ -39,6 +40,7 @@ public class NavigatorController {
                 ));
             }
         } catch (Exception e) {
+            log.info("Error placing robot: {}", e.getMessage());
             return ResponseEntity.badRequest().body(new ResponseDto("Invalid placeDto: ","ERROR"));
         }
     }

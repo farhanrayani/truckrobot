@@ -15,8 +15,8 @@ public class NavigatorComponent {
         this.navigator = new Navigator();
     }
 
-    public boolean place(int x, int y, Turn turn) {
-        if (isValidPosition(x, y)) {
+    public Boolean doPlacing(int x, int y, Turn turn) {
+        if (verifyValidPosition(x, y)) {
             navigator.place(x, y, turn);
             return true;
         }
@@ -43,14 +43,32 @@ public class NavigatorComponent {
         return navigator.report();
     }
 
-    public boolean isRobotPlaced() {
+    public Boolean isRobotPlaced() {
 
         return navigator.isPlaced();
     }
 
-    private boolean isValidPosition(int x, int y) {
+    private Boolean verifyValidPosition(int x, int y) {
+        Boolean xCordinate = false;
+        Boolean yCordinate = false;
 
-        return x >= 0 && x < 5 && y >= 0 && y < 5;
+        if(x >= 0 && x < 5){
+            xCordinate = true;
+        } else{
+            xCordinate = false;
+        }
+
+        if(y >= 0 && y < 5){
+            yCordinate = true;
+        } else{
+            yCordinate = false;
+        }
+        if(xCordinate & yCordinate){
+            return true;
+        } else{
+            return false;
+        }
+
     }
 
     public void reset() {

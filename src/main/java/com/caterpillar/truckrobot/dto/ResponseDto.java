@@ -1,41 +1,13 @@
 package com.caterpillar.truckrobot.dto;
 
-import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 
-@Schema(description = "Standard response from robot operations")
+@Data
+@AllArgsConstructor
 public class ResponseDto {
 
-    @Schema(
-        description = "Response message describing the result of the operation",
-        example = "Robot placed at 0,0 facing NORTH"
-    )
     private String message;
 
-    @Schema(
-        description = "Status of the operation",
-        example = "SUCCESS",
-        allowableValues = {"SUCCESS", "ERROR"}
-    )
     private String status;
-
-    public ResponseDto(String message, String status) {
-        this.message = message;
-        this.status = status;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
 }

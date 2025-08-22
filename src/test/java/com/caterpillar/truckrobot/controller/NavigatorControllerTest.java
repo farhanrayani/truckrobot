@@ -38,20 +38,20 @@ class NavigatorControllerTest {
     @Test
     void testPlace_ValidPosition_Success() throws Exception {
         PlaceDto request = new PlaceDto(0, 0, Turn.NORTH);
-        when(navigatorComponent.place(anyInt(), anyInt(), any(Turn.class))).thenReturn(true);
+        when(navigatorComponent.doPlacing(anyInt(), anyInt(), any(Turn.class))).thenReturn(true);
 
         mockMvc.perform(post("/api/v1/nav/place")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
             .andExpect(status().isOk())
              .andExpect(jsonPath("$.status").value("SUCCESS"));
-        verify(navigatorComponent).place(0, 0, Turn.NORTH);
+        verify(navigatorComponent).doPlacing(0, 0, Turn.NORTH);
     }
 
     @Test
     void testPlace_InvalidPosition_BadRequest() throws Exception {
         PlaceDto request = new PlaceDto(5, 5, Turn.NORTH);
-        when(navigatorComponent.place(anyInt(), anyInt(), any(Turn.class))).thenReturn(false);
+        when(navigatorComponent.doPlacing(anyInt(), anyInt(), any(Turn.class))).thenReturn(false);
 
         mockMvc.perform(post("/api/v1/nav/place")
                 .contentType(MediaType.APPLICATION_JSON)

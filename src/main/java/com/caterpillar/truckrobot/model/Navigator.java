@@ -3,7 +3,7 @@ package com.caterpillar.truckrobot.model;
 public class Navigator {
     private Location location;
     private Turn facing;
-    private boolean placed;
+    private Boolean placed;
 
     public Navigator() {
         this.placed = false;
@@ -42,7 +42,7 @@ public class Navigator {
         this.placed = false;
     }
 
-    private boolean isValidPosition(Location pos) {
+    private Boolean isValidPosition(Location pos) {
         return pos.getX() >= 0 && pos.getX() < 5 && pos.getY() >= 0 && pos.getY() < 5;
     }
 
@@ -53,7 +53,7 @@ public class Navigator {
         return location.getX() + "," + location.getY() + "," + facing;
     }
 
-    public boolean isPlaced() {
+    public Boolean isPlaced() {
         return placed;
     }
 
